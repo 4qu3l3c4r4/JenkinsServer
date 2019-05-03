@@ -19,10 +19,11 @@ COPY show-pom-version.rb /jenkins/src/show-pom-version.rb
 WORKDIR /jenkins/src/
 RUN mvn clean install --batch-mode -Plight-test
 
-# The image is based on the previous weekly, new changes in jenkinci/docker are not applied
-FROM jenkins/jenkins:latest
+# The image is based on https://github.com/jenkinsci/docker/tree/java11
+# All documentation is applicable
+FROM jenkins/jenkins:jdk11
 
-LABEL Description="This is an experimental image for the master branch of the Jenkins core" Vendor="Jenkins Project"
+LABEL Description="This is an experimental image for the master branch of the Jenkins core, for JDK11" Vendor="Jenkins Project"
 
 COPY --from=builder /jenkins/src/war/target/jenkins.war /usr/share/jenkins/jenkins.war
 ENTRYPOINT ["tini", "--", "/usr/local/bin/jenkins.sh"]
